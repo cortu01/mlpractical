@@ -1,5 +1,53 @@
 # Machine Learning Practical
 
+## Special use for me:
+
+3) Pull the weekly lab branch from the course repo (read-only)
+
+Each week, get the lab branch from upstream and base your work on it:
+
+```bash
+# fetch latest course branches
+git fetch upstream
+
+# example: lab 1
+git checkout -B mlp2025-26/lab1 upstream/mlp2025-26/lab1
+
+# create your own work branch off it
+git checkout -b halla/lab1
+```
+
+Do your edits on halla/lab1, then:
+
+```bash
+git add -A
+git commit -m "Lab 1 work"
+git push -u origin halla/lab1
+```
+
+Now your fork on GitHub has your work, and you can pull it from the other machine:
+```bash
+# on the other machine
+git fetch origin
+git checkout -b halla/lab1 origin/halla/lab1
+```
+### Good hygiene to avoid headaches
+
+Keep your fork private (never make a public fork).
+
+Don’t push to upstream; only to your origin (your fork).
+
+Before starting a new session on either machine:
+
+```bash
+git fetch upstream origin
+# update your lab base if the course branch changed
+git checkout mlp2025-26/labN && git reset --hard upstream/mlp2025-26/labN
+# then continue your work branch
+git checkout halla/labN
+git merge --ff-only mlp2025-26/labN
+```
+
 This repository contains the course materials for the University of Edinburgh [School of Informatics](http://www.inf.ed.ac.uk) course [Machine Learning Practical](http://www.inf.ed.ac.uk/teaching/courses/mlp/).
 
 This assignment-based course focuses on the implementation and evaluation of machine learning systems. Students will gain hands-on experience in designing, implementing, training, and evaluating machine learning systems through practical exercises and assignments.
