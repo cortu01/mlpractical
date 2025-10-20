@@ -585,7 +585,7 @@ class CustomActivationLayer(Layer):
         Returns:
             outputs: Array of layer outputs of shape (batch_size, output_dim).
         """
-        return 1 / (10 * (1. + np.exp(-inputs)))
+        return 1 / (20 * (1. + np.exp(-inputs)))
 
     def bprop(self, inputs, outputs, grads_wrt_outputs):
         """Back propagates gradients through a layer.
@@ -604,7 +604,7 @@ class CustomActivationLayer(Layer):
             Array of gradients with respect to the layer inputs of shape
             (batch_size, input_dim).
         """
-        return 0.1 * grads_wrt_outputs * outputs * (1. - outputs)
+        return  grads_wrt_outputs * outputs * (1. - 20 * outputs)
 
     def __repr__(self):
         return 'CustomActivationLayer'
