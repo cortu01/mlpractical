@@ -112,7 +112,7 @@ Any form of regularization will also limit the extent to which the model overfit
 
 First we investigate the effect of increasing the number of hidden units in a single hidden layer network when training on the EMNIST dataset.
 The network is trained using the Adam optimizer
-with a learning rate of $9 \times 10^{-4}$ and a batch size of 100, for a total of 100 epochs.
+with a learning rate of $10^{-3}$ and a batch size of 100, for a total of 100 epochs.
 
 The input layer is of size 784, and output layer consists of 47 units. 
 Three different models were trained, with a single hidden layer of 32, 64 and 128 ReLU hidden units respectively.
@@ -130,7 +130,7 @@ We observe that \questionTwo.
 
 Next we investigate the effect of varying the number of hidden layers in the network. 
 Table~\ref{tab:depth_exps} and Figure~\ref{fig:depth} depict results from training three models with one, two and three hidden layers respectively, each with 128 ReLU hidden units. 
-As with previous experiments, they are trained with the Adam optimizer with a learning rate of $9 \times 10^{-4}$ and a batch size of 100. 
+As with previous experiments, they are trained with the Adam optimizer with a learning rate of $10^{-3}$ and a batch size of 100. 
 
 We observe that \questionFour.
 
