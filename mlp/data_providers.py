@@ -16,7 +16,7 @@ class DataProvider(object):
     """Generic data provider."""
 
     def __init__(self, inputs, targets, batch_size, max_num_batches=-1,
-                 shuffle_order=True, rng=None, smooth_labels=False):
+                 shuffle_order=True, rng=None):
         """Create a new data provider object.
 
         Args:
@@ -32,7 +32,6 @@ class DataProvider(object):
             shuffle_order (bool): Whether to randomly permute the order of
                 the data before each epoch.
             rng (RandomState): A seeded random number generator.
-            smooth_labels (bool): turn on label smoothing
         """
         self.inputs = inputs
         self.targets = targets
@@ -44,12 +43,10 @@ class DataProvider(object):
         self._max_num_batches = max_num_batches
         self._update_num_batches()
         self.shuffle_order = shuffle_order
-        
         self._current_order = np.arange(inputs.shape[0])
         if rng is None:
             rng = np.random.RandomState(DEFAULT_SEED)
         self.rng = rng
-        self.smooth_labels = smooth_labels
         self.new_epoch()
 
     @property
@@ -140,7 +137,7 @@ class MNISTDataProvider(DataProvider):
     """Data provider for MNIST handwritten digit images."""
 
     def __init__(self, which_set='train', batch_size=100, max_num_batches=-1,
-                 shuffle_order=True, rng=None, smooth_labels=False):
+                 shuffle_order=True, rng=None):
         """Create a new MNIST data provider object.
 
         Args:
@@ -154,7 +151,6 @@ class MNISTDataProvider(DataProvider):
             shuffle_order (bool): Whether to randomly permute the order of
                 the data before each epoch.
             rng (RandomState): A seeded random number generator.
-            smooth_labels (bool): enable/disable label smoothing
         """
         # check a valid which_set was provided
         assert which_set in ['train', 'valid', 'test'], (
@@ -177,7 +173,7 @@ class MNISTDataProvider(DataProvider):
         inputs = inputs.astype(np.float32)
         # pass the loaded data to the parent class __init__
         super(MNISTDataProvider, self).__init__(
-            inputs, targets, batch_size, max_num_batches, shuffle_order, rng, smooth_labels)
+            inputs, targets, batch_size, max_num_batches, shuffle_order, rng)
 
     def next(self):
         """Returns next data batch or raises `StopIteration` if at end."""
@@ -203,102 +199,6 @@ class MNISTDataProvider(DataProvider):
         one_of_k_targets[range(int_targets.shape[0]), int_targets] = 1
         return one_of_k_targets
 
-class EMNISTDataProvider(DataProvider):
-    """Data provider for EMNIST handwritten digit images."""
-
-    def __init__(self, which_set='train', batch_size=100, max_num_batches=-1,
-                 shuffle_order=True, rng=None, smooth_labels=False):
-        """Create a new EMNIST data provider object.
-
-        Args:
-            which_set: One of 'train', 'valid' or 'eval'. Determines which
-                portion of the EMNIST data this object should provide.
-            batch_size (int): Number of data points to include in each batch.
-            max_num_batches (int): Maximum number of batches to iterate over
-                in an epoch. If `max_num_batches * batch_size > num_data` then
-                only as many batches as the data can be split into will be
-                used. If set to -1 all of the data will be used.
-            shuffle_order (bool): Whether to randomly permute the order of
-                the data before each epoch.
-            rng (RandomState): A seeded random number generator.
-            smooth_labels (bool): enable/disable label smoothing
-        """
-        # check a valid which_set was provided
-        assert which_set in ['train', 'valid', 'test'], (
-            'Expected which_set to be either train, valid or eval. '
-            'Got {0}'.format(which_set)
-        )
-        self.which_set = which_set
-        self.num_classes = 47
-        # construct path to data using os.path.join to ensure the correct path
-        # separator for the current platform / OS is used
-        # MLP_DATA_DIR environment variable should point to the data directory
-        data_path = os.path.join(
-            os.environ['MLP_DATA_DIR'], 'emnist-{0}.npz'.format(which_set))
-        assert os.path.isfile(data_path), (
-            'Data file does not exist at expected path: ' + data_path
-        )
-        # load data from compressed numpy file
-        loaded = np.load(data_path)
-        print(loaded.keys())
-        inputs, targets = loaded['inputs'], loaded['targets']
-        inputs = inputs.astype(np.float32)
-        inputs = np.reshape(inputs, newshape=(-1, 28*28))
-        inputs = inputs / 255.0
-        # pass the loaded data to the parent class __init__
-        super(EMNISTDataProvider, self).__init__(
-            inputs, targets, batch_size, max_num_batches, shuffle_order, rng, smooth_labels)
-
-    def next(self):
-        """Returns next data batch or raises `StopIteration` if at end."""
-        inputs_batch, targets_batch = super(EMNISTDataProvider, self).next()
-
-        if self.smooth_labels:
-            targets_batch_mat = self.label_smoothing(targets_batch)
-        else:
-            targets_batch_mat = self.to_one_of_k(targets_batch)
-        return inputs_batch, targets_batch_mat
-        
-
-
-    def to_one_of_k(self, int_targets):
-        """Converts integer coded class target to 1 of K coded targets.
-
-        Args:
-            int_targets (ndarray): Array of integer coded class targets (i.e.
-                where an integer from 0 to `num_classes` - 1 is used to
-                indicate which is the correct class). This should be of shape
-                (num_data,).
-
-        Returns:
-            Array of 1 of K coded targets i.e. an array of shape
-            (num_data, num_classes) where for each row all elements are equal
-            to zero except for the column corresponding to the correct class
-            which is equal to one.
-        """
-        one_of_k_targets = np.zeros((int_targets.shape[0], self.num_classes))
-        one_of_k_targets[range(int_targets.shape[0]), int_targets] = 1
-        return one_of_k_targets
-    
-    def label_smoothing(self, int_targets, alpha=0.1):
-        """Converts integer coded class target to 1 of K coded targets with label smoothing.
-
-        Args:
-        int_targets (ndarray): Array of integer coded class targets (i.e.
-        where an integer from 0 to `num_classes` - 1 is used to
-        indicate which is the correct class). This should be of shape
-        (num_data,).
-        alpha (float): Smoothing factor.
-
-        Returns:
-        Array of 1 of K coded targets with label smoothing i.e. an array of shape
-        (num_data, num_classes)
-
-        """
-        
-        raise NotImplementedError
-  
-    
 
 class MetOfficeDataProvider(DataProvider):
     """South Scotland Met Office weather data provider."""
