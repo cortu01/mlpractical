@@ -1,9 +1,17 @@
 import argparse
 import os
 import numpy as np
-
 import sys
-# sys.path.append('/path/to/mlpractical')
+from pathlib import Path
+
+# 修改这个路径为你的 mlpractical 根目录
+BASE = Path(r"D:\mlpractical").resolve()
+
+os.environ["MLP_DATA_DIR"] = str(BASE / "data")
+
+# 确保 mlp package 可以被 import
+if str(BASE) not in sys.path:
+    sys.path.insert(0, str(BASE))
 
 from mlp.layers import DropoutLayer
 from mlp.penalties import L1Penalty, L2Penalty

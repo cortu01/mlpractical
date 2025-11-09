@@ -670,60 +670,37 @@ class RadialBasisFunctionLayer(Layer):
         return 'RadialBasisFunctionLayer(grid_dim={0})'.format(self.grid_dim)
 
 class DropoutLayer(StochasticLayer):
-    """Layer which stochastically drops input dimensions in its output."""
-
     def __init__(self, rng=None, incl_prob=0.5, share_across_batch=True):
-        """Construct a new dropout layer.
-
-        Args:
-            rng (RandomState): Seeded random number generator.
-            incl_prob: Scalar value in (0, 1] specifying the probability of
-                each input dimension being included in the output.
-            share_across_batch: Whether to use same dropout mask across
-                all inputs in a batch or use per input masks.
-        """
         super(DropoutLayer, self).__init__(rng)
-        assert incl_prob > 0. and incl_prob <= 1.
+        assert 0. < incl_prob <= 1.
         self.incl_prob = incl_prob
         self.share_across_batch = share_across_batch
-        self.rng = rng
+        self._last_mask = None
+
+    def _make_mask(self, inputs_shape, dtype):
+        # 除去 batch 维后的形状
+        feat_shape = inputs_shape[1:]
+        if self.share_across_batch:
+            # 按要求：用 U(0,1) 采样（spec 要求 uniform）
+            m = (self.rng.uniform(size=(1,)+feat_shape) < self.incl_prob).astype(dtype)
+        else:
+            m = (self.rng.uniform(size=inputs_shape) < self.incl_prob).astype(dtype)
+        return m
 
     def fprop(self, inputs, stochastic=True):
-        """Forward propagates activations through the layer transformation.
-
-        Args:
-            inputs: Array of layer inputs of shape (batch_size, input_dim).
-            stochastic: Flag allowing different deterministic
-                forward-propagation mode in addition to default stochastic
-                forward-propagation e.g. for use at test time. If False
-                a deterministic forward-propagation transformation
-                corresponding to the expected output of the stochastic
-                forward-propagation is applied.
-
-        Returns:
-            outputs: Array of layer outputs of shape (batch_size, output_dim).
-        """
-        raise NotImplementedError
+        if stochastic:
+            mask = self._make_mask(inputs.shape, inputs.dtype)
+            self._last_mask = mask
+            return inputs * mask
+        else:
+            # 测试时用期望：原始 dropout 做法 -> 乘以 p
+            return inputs * self.incl_prob
 
     def bprop(self, inputs, outputs, grads_wrt_outputs):
-        """Back propagates gradients through a layer.
-
-        Given gradients with respect to the outputs of the layer calculates the
-        gradients with respect to the layer inputs. This should correspond to
-        default stochastic forward-propagation.
-
-        Args:
-            inputs: Array of layer inputs of shape (batch_size, input_dim).
-            outputs: Array of layer outputs calculated in forward pass of
-                shape (batch_size, output_dim).
-            grads_wrt_outputs: Array of gradients with respect to the layer
-                outputs of shape (batch_size, output_dim).
-
-        Returns:
-            Array of gradients with respect to the layer inputs of shape
-            (batch_size, input_dim).
-        """
-        raise NotImplementedError
+        if self._last_mask is None:
+            # 万一没跑过随机前向（例如手动调用），退化为期望缩放
+            return grads_wrt_outputs * self.incl_prob
+        return grads_wrt_outputs * self._last_mask
 
     def __repr__(self):
         return 'DropoutLayer(incl_prob={0:.1f})'.format(self.incl_prob)

@@ -296,7 +296,18 @@ class EMNISTDataProvider(DataProvider):
 
         """
         
-        raise NotImplementedError
+        if not 0.0 <= alpha < 1.0:
+            raise ValueError("alpha must be in [0, 1)")
+        int_targets = np.asarray(int_targets, dtype=np.int64)
+        K = int(self.num_classes)
+        N = int_targets.shape[0]
+
+        # start with all off-target mass equally distributed
+        y = np.full((N, K), fill_value=alpha / (K - 1), dtype=np.float32)
+
+        # put 1 - alpha on the true class for each sample
+        y[np.arange(N), int_targets] = 1.0 - alpha
+        return y
   
     
 
