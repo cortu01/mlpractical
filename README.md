@@ -1,40 +1,26 @@
-# Machine Learning Practical
+# MLP Compute Engines Tutorials Branch
 
-This repository contains the course materials for the University of Edinburgh [School of Informatics](http://www.inf.ed.ac.uk) course [Machine Learning Practical](http://www.inf.ed.ac.uk/teaching/courses/mlp/).
+A short code repo that guides you through the process of running experiments on the Google Cloud Platform.
 
-This assignment-based course focuses on the implementation and evaluation of machine learning systems. Students will gain hands-on experience in designing, implementing, training, and evaluating machine learning systems through practical exercises and assignments.
+## Why do I need it?
+Most Deep Learning experiments require a large amount of compute as you have noticed in term 1. Usage of GPU can accelerate experiments around 30-50x therefore making experiments that require a large amount of time feasible by slashing their runtimes down by a massive factor. For a simple example consider an experiment that required a month to run, that would make it infeasible to actually do research with. Now consider that experiment only requiring 1 day to run, which allows one to iterate over methodologies, tune hyperparameters and overall try far more things. This simple example expresses one of the simplest reasons behind the GPU hype that surrounds machine learning research today.
 
-## Repository Structure
+## Introduction
 
-The code in this repository is organized as follows:
-
-* **`mlp` package**: A [NumPy](http://www.numpy.org/)-based neural network library designed specifically for this course. Students will implement parts of this package and extend it during labs and assignments.
-* **`notebooks` directory**: A collection of [Jupyter](http://jupyter.org/) notebooks containing explanatory material and hands-on coding exercises for the course labs.
-
-## Remote Working
-
-If you are working remotely, please follow the instructions in our [remote working guide](notes/remote-working-guide.md).
+The material available includes tutorial documents and code, as well as tooling that provides more advanced features to aid you in your quests to train lots of learnable differentiable computational graphs.
 
 ## Getting Started
 
-### Environment Setup
+### Google Cloud Platform
 
-Before you can work with the course materials, you'll need to set up your Python development environment. This includes:
+Google Cloud Platform (GCP) is a cloud computing service that provides a number of services, including the ability to run virtual machines (VMs) on their infrastructure. The VMs are called Compute Engine instances. 
 
-- Installing Python and required packages (NumPy, Jupyter, matplotlib, etc.)
-- Setting up the course repository
-- Configuring Jupyter notebooks
-- Verifying your installation
+As an MLP course student, you will be given 50$ worth of credits. This is enough to run a number of experiments on the cloud.
 
-**📋 Complete setup instructions**: Please follow the step-by-step guide in [`notes/environment-set-up.md`](notes/environment-set-up.md). This guide covers installation for different operating systems and provides troubleshooting tips.
+To get started with GCP, please read the [this getting started guide](notes/google_cloud_setup.md).
 
-All students will configure their environment during the first lab session with assistance from teaching staff.
+The guide will take you through the process of setting up a GCP account, creating a project, creating a VM instance, and connecting to it. The VM instance will be a GPU-endowed Linux machine that already includes the necessary PyTorch packages for you to run your experiments. 
 
-## Working with the Exercises
+### School GPU Cluster
 
-**New to Jupyter notebooks?** Start with `notebooks/00_notebook.ipynb` to familiarize yourself with the Jupyter interface and features.
-
-**Getting started with lab exercises:**
-1. Navigate to the `notebooks` directory
-2. For lab 1, work with notebooks starting with prefix `01`
-3. Continue with subsequent numbered notebooks for each lab session  
+To use the school's GPU cluster, please read the [this getting started guide](notes/mlp_cluster_quick_start_up.md).

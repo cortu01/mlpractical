@@ -1,0 +1,16 @@
+{
+  "batch_size": 100,
+  "dataset_name": "cifar10",
+  "continue_from_epoch": -2,
+  "seed": 0,
+  "image_num_channels": 3,
+  "image_height": 32,
+  "image_width": 32,
+  "dim_reduction_type": "avg_pooling",
+  "num_layers": 4,
+  "num_filters": 64,
+  "num_epochs": 250,
+  "experiment_name": "cifar10_tutorial",
+  "use_gpu": true,
+  "weight_decay_coefficient": 1e-05
+}
