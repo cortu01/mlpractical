@@ -25,6 +25,8 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+etc/
+movescript.sh
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -62,3 +64,6 @@ target/
 # Notebook stuff
 notebooks/.ipynb_checkpoints/
 
+# Data folder
+private/
+solutions/

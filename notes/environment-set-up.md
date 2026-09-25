@@ -2,21 +2,21 @@
 
 *The instructions below are intentionally detailed to explain the reasoning behind our environment setup and what each command does. If you're already confident using bash, Conda environments, and Git, you can use the much shorter [minimal setup instructions](#minimal-setup-instructions-for-dice) at the end.*
 
-This course uses [Python 3](https://www.python.org/) for all labs and coursework assignments. We'll make heavy use of the numerical computing libraries [NumPy](http://www.numpy.org/) and [SciPy](http://www.scipy.org/), and the interactive notebook application [Jupyter](http://jupyter.org/).
+This course uses [Python 3](https://www.python.org/) for all labs and coursework assignments. We'll make heavy use of the numerical computing libraries [NumPy](https://numpy.org/) and [SciPy](https://scipy.org/), and the interactive notebook application [Jupyter](https://jupyter.org/).
 
 A common challenge in software projects is managing correct versions of dependencies across different systems and projects. You may be working on multiple projects with conflicting dependencies, across different machines with different operating systems, or on systems where you don't have root access (like DICE).
 
 To solve these issues, we use project-specific *virtual environments* - isolated development environments where dependencies can be installed and managed independently of system-wide versions.
 
-We'll use [Conda](http://conda.pydata.org/docs/) for environment management. Unlike pip and virtualenv, Conda is language-agnostic and can handle complex dependencies including optimized numerical computing libraries. Conda works across Linux, macOS, and Windows, making it easy to set up consistent environments wherever you work.
+We'll use [Conda](https://docs.conda.io/) for environment management. Unlike pip and virtualenv, Conda is language-agnostic and can handle complex dependencies including optimized numerical computing libraries. Conda works across Linux, macOS, and Windows, making it easy to set up consistent environments wherever you work.
 
-We'll use [Miniconda](http://conda.pydata.org/miniconda.html), which installs just Conda and its dependencies (rather than the full Anaconda distribution), to save disk space on DICE.
+We'll use [Miniconda](https://www.anaconda.com/docs/getting-started/installation), which installs just Conda and its dependencies (rather than the full Anaconda distribution), to save disk space on DICE.
 
 ## Installing Miniconda
 
 We provide instructions for setting up the environment on [DICE desktop](http://computing.help.inf.ed.ac.uk/dice-platform) computers. These instructions should work on other Linux distributions (Ubuntu, Linux Mint) with minimal adjustments.
 
-**For Windows or macOS:** Select the appropriate installer from [here](https://docs.conda.io/en/latest/miniconda.html) and follow the installation instructions from [here](https://conda.io/projects/conda/en/latest/user-guide/install/index.html). After Conda is installed, the [remaining instructions](#creating-the-conda-environment) should be the same across different systems.
+**For Windows or macOS:** Select the appropriate Miniconda installer from the [official installation page](https://www.anaconda.com/docs/getting-started/installation) and follow the [Conda installation instructions](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html). After Conda is installed, the [remaining instructions](#creating-the-conda-environment) should be the same across different systems.
 
 *Note: While you're welcome to set up an environment on a personal machine, you should still set up a DICE environment as you'll need access to shared computing resources later in the course. These instructions have only been tested on DICE, and we cannot provide support for non-DICE systems during labs.*
 
@@ -67,14 +67,14 @@ source ~/.benv
 
 **Accept Conda Terms of Service (if required):**
 
-Newer versions of Miniconda may require accepting Terms of Service before using certain channels. If you encounter TOS-related errors, run these commands:
+Recent Miniconda installers may require accepting Terms of Service before using the default Anaconda channels. If Conda prompts you, accept the terms in the prompt. If your installer includes the `conda-anaconda-tos` plugin and you need to accept the terms explicitly, run:
 
 ```bash
 conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
 conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
 ```
 
-*Note: These commands may or may not be required depending on your Miniconda version and configuration.*
+If `conda tos` is not a recognised command, your installer predates this plugin; skip these commands. This is expected, and the remaining setup commands are unchanged.
 
 ## Creating the Conda Environment
 
@@ -110,7 +110,7 @@ Install the required packages:
 conda install numpy scipy matplotlib jupyter -y
 ```
 
-This will take several minutes and installs NumPy, SciPy, [matplotlib](http://matplotlib.org/) (for plotting), and Jupyter.
+This will take several minutes and installs NumPy, SciPy, [matplotlib](https://matplotlib.org/) (for plotting), and Jupyter.
 
 Install PyTorch:
 
@@ -147,7 +147,7 @@ pkgs_dirs:
 
 The course code is available in a Git repository on GitHub: https://github.com/cortu01/mlpractical
 
-[Git](https://git-scm.com/) is a version control system, and [GitHub](https://github.com) hosts Git repositories. We use Git to distribute code for labs and assignments. For Git beginners, see [this guide](http://rogerdudler.github.io/git-guide/) or [this longer tutorial](https://www.atlassian.com/git/tutorials/).
+[Git](https://git-scm.com/) is a version control system, and [GitHub](https://github.com) hosts Git repositories. We use Git to distribute code for labs and assignments. For Git beginners, see [this guide](https://rogerdudler.github.io/git-guide/) or [this longer tutorial](https://www.atlassian.com/git/tutorials/).
 
 **Non-DICE systems:** Git is pre-installed on DICE. If needed, install it with: `conda install git`
 
@@ -183,7 +183,7 @@ git config --global user.email "your-email@sms.ed.ac.uk"
 
 ### Understanding Branches
 
-We use Git branches to organize course content. Each lab has its own branch (e.g., `mlp2025-26/lab1`, `mlp2025-26/lab2`). This lets us release content progressively while preserving your work.
+We use Git branches to organize course content. Each lab has its own branch (e.g., `mlp2026-27/lab1`, `mlp2026-27/lab2`). This lets us release content progressively while preserving your work.
 
 Check current branch:
 
@@ -200,7 +200,7 @@ git branch
 Switch to the first lab branch:
 
 ```bash
-git checkout mlp2025-26/lab1
+git checkout mlp2026-27/lab1
 ```
 
 **Important:** Make sure you're on the correct lab branch before starting each week's work.
@@ -218,32 +218,14 @@ pip install -e .
 
 This installs the package in "editable" mode, meaning any changes to the source code are immediately available without reinstalling.
 
-## Setting Up the Data Directory
+## Data directory
 
-The `data` directory contains files used in labs and assignments. We need to set an environment variable so the data loaders can find these files.
-
-**For Linux/macOS:**
-
-```bash
-cd ~/miniconda3/envs/mlp
-mkdir -p ./etc/conda/activate.d
-mkdir -p ./etc/conda/deactivate.d
-echo -e '#!/bin/sh\n' >> ./etc/conda/activate.d/env_vars.sh
-echo "export MLP_DATA_DIR=$HOME/mlpractical/data" >> ./etc/conda/activate.d/env_vars.sh
-echo -e '#!/bin/sh\n' >> ./etc/conda/deactivate.d/env_vars.sh
-echo 'unset MLP_DATA_DIR' >> ./etc/conda/deactivate.d/env_vars.sh
-export MLP_DATA_DIR=$HOME/mlpractical/data
-```
-
-**For Windows:**
+The data providers use the repository's `data` directory automatically. Set
+`MLP_DATA_DIR` only when keeping the datasets elsewhere (for example, on a
+shared filesystem):
 
 ```bash
-cd [path-to-conda-root]\envs\mlp
-mkdir .\etc\conda\activate.d
-mkdir .\etc\conda\deactivate.d
-echo "set MLP_DATA_DIR=[path-to-local-repository]\data" >> .\etc\conda\activate.d\env_vars.bat
-echo "set MLP_DATA_DIR="  >> .\etc\conda\deactivate.d\env_vars.bat
-set MLP_DATA_DIR=[path-to-local-repository]\data
+export MLP_DATA_DIR=/path/to/mlpractical/data
 ```
 
 ## Starting Jupyter Notebooks
@@ -259,7 +241,7 @@ jupyter notebook
 ```
 
 3. In the browser interface, navigate to the `notebooks` directory
-4. Open `01_Introduction.ipynb` to start the first lab
+4. Open `01_introduction.ipynb` to start the first lab
 
 The notebook interface combines formatted text, runnable code, and visualizations in a web browser. If you're new to Jupyter notebooks, the first lab will introduce you to the interface.
 
@@ -287,6 +269,7 @@ source ~/.benv
 conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
 conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
 ```
+   If `conda tos` is not a recognised command, skip this step; older Miniconda installers do not include the Terms of Service plugin.
 
 4. **Create and activate environment:**
 ```bash
@@ -305,7 +288,7 @@ conda clean -t -y
 ```bash
 git clone https://github.com/cortu01/mlpractical.git ~/mlpractical
 cd ~/mlpractical
-git checkout mlp2025-26/lab1
+git checkout mlp2026-27/lab1
 ```
 
 7. **Install MLP package:**
@@ -314,22 +297,14 @@ cd ~/mlpractical
 pip install -e .
 ```
 
-8. **Setup data directory:**
-```bash
-cd ~/miniconda3/envs/mlp
-mkdir -p ./etc/conda/activate.d ./etc/conda/deactivate.d
-echo -e '#!/bin/sh\n' >> ./etc/conda/activate.d/env_vars.sh
-echo "export MLP_DATA_DIR=$HOME/mlpractical/data" >> ./etc/conda/activate.d/env_vars.sh
-echo -e '#!/bin/sh\n' >> ./etc/conda/deactivate.d/env_vars.sh
-echo 'unset MLP_DATA_DIR' >> ./etc/conda/deactivate.d/env_vars.sh
-export MLP_DATA_DIR=$HOME/mlpractical/data
-```
+8. **Optional data directory:** Set `MLP_DATA_DIR` only if the datasets are
+   stored outside the repository (see the section above).
 
 9. **Start working:**
 ```bash
 cd ~/mlpractical
 jupyter notebook
 ```
-   Then open `notebooks/01_Introduction.ipynb`
+   Then open `notebooks/01_introduction.ipynb`
 
 **Remember:** Run `conda activate mlp` at the start of each session!

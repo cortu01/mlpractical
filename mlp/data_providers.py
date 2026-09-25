@@ -12,6 +12,15 @@ import os
 from mlp import DEFAULT_SEED
 
 
+_DEFAULT_DATA_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), os.pardir, 'data'))
+
+
+def _data_dir():
+    """Return the configured data directory or this checkout's data folder."""
+    return os.environ.get('MLP_DATA_DIR', _DEFAULT_DATA_DIR)
+
+
 class DataProvider(object):
     """Generic data provider."""
 
@@ -119,9 +128,8 @@ class MNISTDataProvider(DataProvider):
         self.num_classes = 10
         # construct path to data using os.path.join to ensure the correct path
         # separator for the current platform / OS is used
-        # MLP_DATA_DIR environment variable should point to the data directory
         data_path = os.path.join(
-            os.environ['MLP_DATA_DIR'], 'mnist-{0}.npz'.format(which_set))
+            _data_dir(), 'mnist-{0}.npz'.format(which_set))
         assert os.path.isfile(data_path), (
             'Data file does not exist at expected path: ' + data_path
         )
@@ -182,8 +190,7 @@ class MetOfficeDataProvider(DataProvider):
         """
         self.window_size = window_size
         assert window_size > 1, 'window_size must be at least 2.'
-        data_path = os.path.join(
-            os.environ['MLP_DATA_DIR'], 'HadSSP_daily_qc.txt')
+        data_path = os.path.join(_data_dir(), 'HadSSP_daily_qc.txt')
         assert os.path.isfile(data_path), (
             'Data file does not exist at expected path: ' + data_path
         )
