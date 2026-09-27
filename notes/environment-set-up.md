@@ -16,7 +16,7 @@ We'll use [Miniconda](https://www.anaconda.com/docs/getting-started/installation
 
 We provide instructions for setting up the environment on [DICE desktop](http://computing.help.inf.ed.ac.uk/dice-platform) computers. These instructions should work on other Linux distributions (Ubuntu, Linux Mint) with minimal adjustments.
 
-**For Windows or macOS:** Select the appropriate Miniconda installer from the [official installation page](https://www.anaconda.com/docs/getting-started/installation) and follow the [Conda installation instructions](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html). After Conda is installed, the [remaining instructions](#creating-the-conda-environment) should be the same across different systems.
+**For Windows or macOS:** Select the appropriate Miniconda installer from the [official installation page](https://www.anaconda.com/docs/getting-started/installation) and follow the [Conda installation instructions](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html). The commands below target DICE and other Linux systems using Bash; package installation and paths may differ on other operating systems.
 
 *Note: While you're welcome to set up an environment on a personal machine, you should still set up a DICE environment as you'll need access to shared computing resources later in the course. These instructions have only been tested on DICE, and we cannot provide support for non-DICE systems during labs.*
 
@@ -89,7 +89,7 @@ If you see the Conda help page, you're ready to proceed. If you get a `No comman
 Create the Conda environment with Python 3.12:
 
 ```bash
-conda create -n mlp python=3.12 -y
+conda create -n mlp python=3.12 pip -y
 ```
 
 Activate the environment:
@@ -107,18 +107,18 @@ To deactivate an environment, run `conda deactivate` (or just `deactivate` on Wi
 Install the required packages:
 
 ```bash
-conda install numpy scipy matplotlib jupyter -y
+conda install numpy scipy matplotlib jupyter ipywidgets -y
 ```
 
-This will take several minutes and installs NumPy, SciPy, [matplotlib](https://matplotlib.org/) (for plotting), and Jupyter.
+This will take several minutes and installs NumPy, SciPy, [matplotlib](https://matplotlib.org/) (for plotting) and Jupyter.
 
-Install PyTorch:
+Install the CPU version of PyTorch and torchvision:
 
-```bash 
-conda install pytorch torchvision torchaudio cpuonly -c pytorch -y
+```bash
+python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 ```
 
-*Note: This installs the CPU-only version. If you have a CUDA-enabled GPU, replace `cpuonly -c pytorch` with your CUDA version (e.g., `pytorch-cuda=12.1 -c pytorch -c nvidia`). See [PyTorch installation guide](https://pytorch.org/get-started/locally/) for details.*
+The course notebooks also run on computers without a GPU. For optional GPU acceleration, choose the Linux installation command for your hardware from the [PyTorch installation guide](https://pytorch.org/get-started/locally/).
 
 Clean up installation files to save disk space:
 
@@ -213,7 +213,7 @@ Install the package in development mode (so changes are automatically available)
 
 ```bash
 cd ~/mlpractical
-pip install -e .
+python -m pip install -e .
 ```
 
 This installs the package in "editable" mode, meaning any changes to the source code are immediately available without reinstalling.
@@ -273,14 +273,14 @@ conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
 
 4. **Create and activate environment:**
 ```bash
-conda create -n mlp python=3.12 -y
+conda create -n mlp python=3.12 pip -y
 conda activate mlp
 ```
 
 5. **Install packages:**
 ```bash
-conda install numpy scipy matplotlib jupyter -y
-conda install pytorch torchvision torchaudio cpuonly -c pytorch -y
+conda install numpy scipy matplotlib jupyter ipywidgets -y
+python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 conda clean -t -y
 ```
 
@@ -294,7 +294,7 @@ git checkout mlp2026-27/lab1
 7. **Install MLP package:**
 ```bash
 cd ~/mlpractical
-pip install -e .
+python -m pip install -e .
 ```
 
 8. **Optional data directory:** Set `MLP_DATA_DIR` only if the datasets are

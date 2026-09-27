@@ -64,6 +64,11 @@ target/
 # Notebook stuff
 notebooks/.ipynb_checkpoints/
 
+# Local planning and agent files
+.claude/
+STATUS.md
+docs/
+
 # Data folder
 private/
 solutions/

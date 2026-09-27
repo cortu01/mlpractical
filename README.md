@@ -10,6 +10,8 @@ The code in this repository is organized as follows:
 
 * **`mlp` package**: A [NumPy](http://www.numpy.org/)-based neural network library designed specifically for this course. Students will implement parts of this package and extend it during labs and assignments.
 * **`notebooks` directory**: A collection of [Jupyter](http://jupyter.org/) notebooks containing explanatory material and hands-on coding exercises for the course labs.
+* **`data` directory**: Datasets used by the lab notebooks.
+* **`notes` directory**: Environment setup, lab, and remote-working guides.
 
 ## Remote Working
 
@@ -23,10 +25,10 @@ Before you can work with the course materials, you'll need to set up your Python
 
 - Installing Python and required packages (NumPy, Jupyter, matplotlib, etc.)
 - Setting up the course repository
-- Configuring Jupyter notebooks
+- Starting Jupyter notebooks
 - Verifying your installation
 
-**📋 Complete setup instructions**: Please follow the step-by-step guide in [`notes/environment-set-up.md`](notes/environment-set-up.md). This guide covers installation for different operating systems and provides troubleshooting tips.
+**📋 Complete setup instructions**: Please follow the step-by-step guide in [`notes/environment-set-up.md`](notes/environment-set-up.md). The commands target DICE and comparable Linux systems.
 
 All students will configure their environment during the first lab session with assistance from teaching staff.
 
