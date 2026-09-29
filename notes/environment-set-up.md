@@ -107,7 +107,7 @@ To deactivate an environment, run `conda deactivate` (or just `deactivate` on Wi
 Install the required packages:
 
 ```bash
-conda install numpy scipy matplotlib jupyter ipywidgets -y
+conda install numpy=2.3.4 scipy matplotlib jupyter ipywidgets -y
 ```
 
 This will take several minutes and installs NumPy, SciPy, [matplotlib](https://matplotlib.org/) (for plotting) and Jupyter.
@@ -279,7 +279,8 @@ conda activate mlp
 
 5. **Install packages:**
 ```bash
-conda install numpy scipy matplotlib jupyter ipywidgets -y
+# Use a NumPy build compatible with older DICE CPUs.
+conda install numpy=2.3.4 scipy matplotlib jupyter ipywidgets -y
 python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 conda clean -t -y
 ```
