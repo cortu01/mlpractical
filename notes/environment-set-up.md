@@ -126,22 +126,6 @@ Clean up installation files to save disk space:
 conda clean -t -y
 ```
 
-***ANLP and IAML students only:***
-To have normal access to your ANLP and IAML environments please do the following:
-
-1. ```nano .condarc```
-2. Add the following lines in the file:
-
-```yml
-envs_dirs:
-- /group/teaching/conda/envs
-
-pkgs_dirs:
-- /group/teaching/conda/pkgs
-- ~/miniconda3/pkgs
-```
-
-3. Exit by using control + x and then choosing 'yes' at the exit prompt.
 
 ## Getting the Course Code
 
