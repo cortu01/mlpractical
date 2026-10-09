@@ -59,9 +59,75 @@ class SingleLayerModel(object):
         """
         return self.layer.grads_wrt_params(activations[0], grads_wrt_outputs)
 
-    def params_cost(self):
-        """Calculates the parameter dependent cost term of the model."""
-        return self.layer.params_cost()
-
     def __repr__(self):
         return 'SingleLayerModel(' + str(self.layer) + ')'
+
+
+class MultipleLayerModel(object):
+    """A model consisting of multiple layers applied sequentially."""
+
+    def __init__(self, layers):
+        """Create a new multiple layer model instance.
+
+        Args:
+            layers: List of the the layer objecst defining the model in the
+                order they should be applied from inputs to outputs.
+        """
+        self.layers = layers
+
+    @property
+    def params(self):
+        """A list of all of the parameters of the model."""
+        params = []
+        for layer in self.layers:
+            if isinstance(layer, LayerWithParameters):
+                params += layer.params
+        return params
+
+    def fprop(self, inputs):
+        """Forward propagates a batch of inputs through the model.
+
+        Args:
+            inputs: Batch of inputs to the model.
+
+        Returns:
+            List of the activations at the output of all layers of the model
+            plus the inputs (to the first layer) as the first element. The
+            last element of the list corresponds to the model outputs.
+        """
+        activations = [inputs]
+        for i, layer in enumerate(self.layers):
+            activations.append(self.layers[i].fprop(activations[i]))
+        return activations
+
+    def grads_wrt_params(self, activations, grads_wrt_outputs):
+        """Calculates gradients with respect to the model parameters.
+
+        Args:
+            activations: List of all activations from forward pass through
+                model using `fprop`.
+            grads_wrt_outputs: Gradient with respect to the model outputs of
+               the scalar function parameter gradients are being calculated
+               for.
+
+        Returns:
+            List of gradients of the scalar function with respect to all model
+            parameters.
+        """
+        grads_wrt_params = []
+        for i, layer in enumerate(self.layers[::-1]):
+            inputs = activations[-i - 2]
+            outputs = activations[-i - 1]
+            grads_wrt_inputs = layer.bprop(inputs, outputs, grads_wrt_outputs)
+            if isinstance(layer, LayerWithParameters):
+                grads_wrt_params += layer.grads_wrt_params(
+                    inputs, grads_wrt_outputs)[::-1]
+            grads_wrt_outputs = grads_wrt_inputs
+        return grads_wrt_params[::-1]
+
+    def __repr__(self):
+        return (
+            'MultiLayerModel(\n    ' +
+            '\n    '.join([str(layer) for layer in self.layers]) +
+            '\n)'
+        )
