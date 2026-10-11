@@ -1,42 +1,31 @@
-# Machine Learning Practical
+# Machine Learning Practical 2026/27 — Coursework 1
 
-This repository contains the course materials for the University of Edinburgh [School of Informatics](http://www.inf.ed.ac.uk) course [Machine Learning Practical](http://www.inf.ed.ac.uk/teaching/courses/mlp/).
+Coursework materials for the University of Edinburgh Machine Learning Practical course, on branch `mlp2026-27/coursework1`. The coursework uses PyTorch and the EMNIST Balanced dataset.
 
-This assignment-based course focuses on the implementation and evaluation of machine learning systems. Students will gain hands-on experience in designing, implementing, training, and evaluating machine learning systems through practical exercises and assignments.
+Coursework 1 is formative: complete the five experiments for Table 3, Figure 4, and draft answers to Questions 1, 2 and 4. Released Monday 12 October 2026; submission due 12:00 Friday 23 October 2026. See `MLP2026_27_CW1_Spec.pdf` on Learn for the full specification and submission instructions.
 
-## Repository Structure
+## Getting started
 
-The code in this repository is organized as follows:
+Use the Conda environment set up for the labs, with PyTorch, NumPy, Matplotlib and Jupyter installed. From the repository root, open the coursework notebook:
 
-* **`mlp` package**: A [NumPy](http://www.numpy.org/)-based neural network library designed specifically for this course. Students will implement parts of this package and extend it during labs and assignments.
-* **`notebooks` directory**: A collection of [Jupyter](http://jupyter.org/) notebooks containing explanatory material and hands-on coding exercises for the course labs.
-* **`data` directory**: Datasets used by the lab notebooks.
-* **`notes` directory**: Environment setup, lab, and remote-working guides.
+```bash
+jupyter notebook notebooks/Coursework_1.ipynb
+```
 
-## Remote Working
+Edit your student number and answers in `report/mlp-cw1-questions.tex`, and add references to `report/ref.bib`. Build the report with:
 
-If you are working remotely, please follow the instructions in our [remote working guide](notes/remote-working-guide.md).
+```bash
+cd report
+latexmk -pdf mlp-cw1-template.tex
+```
 
-## Getting Started
+If `latexmk` is unavailable, run `pdflatex mlp-cw1-template`, `bibtex mlp-cw1-template`, then `pdflatex mlp-cw1-template` twice.
 
-### Environment Setup
+## Repository map
 
-Before you can work with the course materials, you'll need to set up your Python development environment. This includes:
+- `notebooks/` — PyTorch data loading, model building and training; start with `Coursework_1.ipynb`. Keep coursework experiment code alongside the notebook.
+- `data/` — supplied EMNIST training, validation and test splits, plus diagnostic data.
+- `report/` — LaTeX report template, question placeholders, bibliography and style files; start with `mlp-cw1-questions.tex`. `figures/` contains supplied and placeholder plots; `additional-latex-files/` contains fallback LaTeX packages.
+- `notes/` — environment, lab and remote access guidance; start with `environment-set-up.md`.
 
-- Installing Python and required packages (NumPy, Jupyter, matplotlib, etc.)
-- Setting up the course repository
-- Starting Jupyter notebooks
-- Verifying your installation
-
-**📋 Complete setup instructions**: Please follow the step-by-step guide in [`notes/environment-set-up.md`](notes/environment-set-up.md). The commands target DICE and comparable Linux systems.
-
-All students will configure their environment during the first lab session with assistance from teaching staff.
-
-## Working with the Exercises
-
-**New to Jupyter notebooks?** Start with `notebooks/00_notebook.ipynb` to familiarize yourself with the Jupyter interface and features.
-
-**Getting started with lab exercises:**
-1. Navigate to the `notebooks` directory
-2. For lab 1, work with notebooks starting with prefix `01`
-3. Continue with subsequent numbered notebooks for each lab session  
+This coursework branch uses the PyTorch notebook directly. The report styles retain their original `mlp2022` and ICML 2017 filenames.

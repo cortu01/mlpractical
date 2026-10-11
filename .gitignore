@@ -8,7 +8,6 @@ __pycache__/
 # C extensions
 *.so
 
-**/.ipynb_checkpoints/
 # Distribution / packaging
 .Python
 env/
@@ -26,7 +25,6 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
-etc/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -64,11 +62,4 @@ target/
 # Notebook stuff
 notebooks/.ipynb_checkpoints/
 
-# Local planning and agent files
-.claude/
-STATUS.md
-docs/
-
-# Data folder
-private/
-solutions/
+.vscode
