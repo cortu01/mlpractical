@@ -60,7 +60,7 @@ class SingleLayerModel(object):
         return self.layer.grads_wrt_params(activations[0], grads_wrt_outputs)
 
     def __repr__(self):
-        return 'SingleLayerModel(' + str(self.layer) + ')'
+        return 'SingleLayerModel(' + str(layer) + ')'
 
 
 class MultipleLayerModel(object):

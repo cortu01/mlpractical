@@ -17,7 +17,8 @@ requires-python = ">=3.12"
 dependencies = [
     "numpy==2.3.4",
     "scipy",
-    "matplotlib"
+    "matplotlib",
+    "ipympl==0.10.0"
 ]
 
 [project.optional-dependencies]

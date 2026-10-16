@@ -57,7 +57,7 @@ class BinaryCrossEntropyError(object):
             Scalar error function value.
         """
         return -np.mean(
-            targets * np.log(outputs) + (1. - targets) * np.log(1. - outputs))
+            targets * np.log(outputs) + (1. - targets) * np.log(1. - ouputs))
 
     def grad(self, outputs, targets):
         """Calculates gradient of error function with respect to outputs.
