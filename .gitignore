@@ -72,3 +72,5 @@ docs/
 # Data folder
 private/
 solutions/
+
+.vscode/
